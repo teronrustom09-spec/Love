@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Surprise</title>
+  <style>
+    body {
+      margin: 0;
+      background: white;
+      overflow: hidden;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Falling Love Wall */
+    .biglove {
+      position: absolute;
+      font-size: 60px; /* very big */
+      font-weight: bold;
+      color: crimson;
+      text-align: center;
+      width: 100%;
+      animation: fall 12s linear forwards; /* faster fall */
+      user-select: none;
+      white-space: pre-line;
+      line-height: 2.2; /* spacing between lines */
+      opacity: 0.95;
+    }
+
+    @keyframes fall {
+      from { top: -100%; opacity: 1; }
+      to { top: 100vh; opacity: 0; }
+    }
+
+    /* Side Flower/Heart Blasts */
+    .blast {
+      position: absolute;
+      font-size: 30px;
+      animation: blast 3s ease-out forwards;
+      user-select: none;
+    }
+
+    @keyframes blast {
+      from { transform: translateX(0) scale(1); opacity: 1; }
+      to { transform: translateX(200px) scale(2); opacity: 0; }
+    }
+
+    @keyframes blastLeft {
+      from { transform: translateX(0) scale(1); opacity: 1; }
+      to { transform: translateX(-200px) scale(2); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+<script>
+  let taps = 0;
+
+  document.body.addEventListener("click", () => {
+    taps++;
+    if (taps === 2) {
+      // Build giant love wall with 300 lines
+      let loveText = "";
+      for (let i = 0; i < 300; i++) {
+        loveText += "I LOVE YOU ♡\n\n";
+      }
+
+      let text = document.createElement("div");
+      text.className = "biglove";
+      text.textContent = loveText;
+      document.body.appendChild(text);
+
+      setTimeout(() => text.remove(), 12500); // remove slightly after fall ends
+
+      // Flowers + Hearts blasting faster and more
+      const symbols = ["💖", "🌸", "🌺", "🌹"];
+
+      let blastInterval = setInterval(() => {
+        let count = 8 + Math.floor(Math.random() * 3); // 8–10 per blast
+        for (let i = 0; i < count; i++) {
+          let blast = document.createElement("div");
+          blast.className = "blast";
+          blast.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+          blast.style.top = Math.random() * window.innerHeight + "px";
+
+          if (Math.random() > 0.5) {
+            blast.style.left = "0px";
+            blast.style.animation = "blast 3s ease-out forwards";
+            blast.style.color = "crimson";
+          } else {
+            blast.style.right = "0px";
+            blast.style.animation = "blastLeft 3s ease-out forwards";
+            blast.style.color = "deeppink";
+          }
+
+          document.body.appendChild(blast);
+          setTimeout(() => blast.remove(), 3000);
+        }
+      }, 300); // faster blasts
+
+      setTimeout(() => clearInterval(blastInterval), 12000);
+    }
+  });
+</script>
+</body>
+</html>
